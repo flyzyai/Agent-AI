@@ -15,10 +15,10 @@ async def read_root():
 
 @app.post("/ask")
 async def ask(query: Query):
-    ai_response = ask_ai(query.message)
+    ai_response = await ask_ai(query.message)
     flights = search_flights(ai_response)
     return {"flights": flights, "ai_response": ai_response}
 
 @app.post("/webhook")
 async def telegram_webhook(request: Request):
-    return await handle_telegram_update(request, ask_ai)
+    return await handle_telegram_update(request, ask_ai)  # Przekazanie funkcji ask_ai
