@@ -5,7 +5,7 @@ from fastapi import Request, HTTPException
 
 # Ustawienia tokenu Telegrama
 TELEGRAM_TOKEN = os.getenv("7439037241:AAFKc-0JRGMebKpa37Bp5dDfN9MYEkQ3XqQ")
-BASE_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
+BASE_URL = f"https://api.telegram.org/bot7439037241:AAFKc-0JRGMebKpa37Bp5dDfN9MYEkQ3XqQ"
 
 # Funkcja wysyłania wiadomości do użytkownika
 async def send_message(chat_id, text):
