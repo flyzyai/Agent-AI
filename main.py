@@ -9,16 +9,19 @@ app = FastAPI()
 class Query(BaseModel):
     message: str
 
-@app.get("/")  # Nowa trasa, która odpowiada na żądania GET / (strona główna)
+# Endpoint GET do sprawdzenia działania aplikacji
+@app.get("/")  
 async def read_root():
     return {"message": "Server is running"}
 
+# Endpoint POST do zadawania pytań do OpenAI
 @app.post("/ask")
 async def ask(query: Query):
-    ai_response = await ask_ai(query.message)
-    flights = search_flights(ai_response)
+    ai_response = await ask_ai(query.message)  # Asynchronicznie wysyłamy zapytanie do OpenAI
+    flights = search_flights(ai_response)  # Wyniki lotów na podstawie odpowiedzi AI
     return {"flights": flights, "ai_response": ai_response}
 
+# Endpoint webhook do obsługi wiadomości z Telegrama
 @app.post("/webhook")
 async def telegram_webhook(request: Request):
-    return await handle_telegram_update(request, ask_ai)  # Przekazanie funkcji ask_ai
+    return await handle_telegram_update(request)  # Obsługuje webhook i przekazuje dane do funkcji
