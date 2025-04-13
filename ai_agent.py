@@ -1,22 +1,10 @@
-import openai
-import os
+from openai import OpenAI
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI()
 
-def ask_ai(message):
-    prompt = f"""
-    Na podstawie tej wiadomości użytkownika, wyodrębnij dane podróży:
-    Wiadomość: {message}
-    Zwróć JSON w formacie:
-    {{
-        "origin": "...",
-        "destination": "...",
-        "date": "...",
-        "budget": "..."
-    }}
-    """
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
+def ask_ai(prompt):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}]
     )
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content
