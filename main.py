@@ -9,6 +9,10 @@ app = FastAPI()
 class Query(BaseModel):
     message: str
 
+@app.get("/")  # Nowa trasa, która odpowiada na żądania GET / (strona główna)
+async def read_root():
+    return {"message": "Server is running"}
+
 @app.post("/ask")
 async def ask(query: Query):
     ai_response = ask_ai(query.message)
