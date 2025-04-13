@@ -1,12 +1,11 @@
 import os
 import openai
-from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-def ask_ai(message: str) -> str:
+# Nowa funkcja do zapytań do OpenAI, asynchroniczna
+async def ask_ai(message: str) -> str:
     try:
-        response = client.chat.completions.create(
+        # Wywołanie OpenAI z API ChatCompletion
+        response = await openai.ChatCompletion.create(  # Zmiana na asynchroniczną funkcję
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": message}],
         )
