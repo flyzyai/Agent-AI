@@ -9,19 +9,24 @@ app = FastAPI()
 class Query(BaseModel):
     message: str
 
-# Endpoint GET do sprawdzenia działania aplikacji
-@app.get("/")  
+# Główna strona aplikacji, obsługująca GET / oraz HEAD /
+@app.get("/")
 async def read_root():
     return {"message": "Server is running"}
 
-# Endpoint POST do zadawania pytań do OpenAI
+# Obsługa HEAD / (zwrócenie pustej odpowiedzi)
+@app.head("/")
+async def head_root():
+    return {}
+
+# Endpoint do zapytań do AI i wyszukiwania lotów
 @app.post("/ask")
 async def ask(query: Query):
-    ai_response = await ask_ai(query.message)  # Asynchronicznie wysyłamy zapytanie do OpenAI
-    flights = search_flights(ai_response)  # Wyniki lotów na podstawie odpowiedzi AI
+    ai_response = ask_ai(query.message)
+    flights = search_flights(ai_response)
     return {"flights": flights, "ai_response": ai_response}
 
-# Endpoint webhook do obsługi wiadomości z Telegrama
+# Endpoint webhook do Telegrama
 @app.post("/webhook")
 async def telegram_webhook(request: Request):
-    return await handle_telegram_update(request)  # Obsługuje webhook i przekazuje dane do funkcji
+    return await handle_telegram_update(request, ask_ai)
